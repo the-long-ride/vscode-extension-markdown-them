@@ -1,0 +1,16 @@
+.vscode/**
+.vscode-test/**
+out/test/**
+src/**
+.gitignore
+.vscodeignore
+tsconfig.json
+package-lock.json
+vsc-extension-quickstart.md
+instructions/**
+guideline.md
+changelog.md
+assets/**
+!assets/markdown-them-logo.png
+node_modules/**
+

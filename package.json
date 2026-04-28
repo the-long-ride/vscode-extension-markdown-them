@@ -48,9 +48,10 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run bundle",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "bundle": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --minify"
   },
   "dependencies": {
     "@opendocsg/pdf2md": "^0.2.6",
@@ -63,6 +64,8 @@
     "@types/node": "^25.6.0",
     "@types/turndown": "^5.0.6",
     "@types/vscode": "^1.80.0",
+    "@vscode/vsce": "^3.9.1",
+    "esbuild": "^0.28.0",
     "typescript": "^6.0.3"
   }
 }
