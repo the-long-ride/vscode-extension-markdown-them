@@ -2,46 +2,40 @@ name: Build & Release
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - "v*"
 
 jobs:
   build:
     name: Build VSIX
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # Allow pushing commits and creating releases
+      contents: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Configure Git
+      - name: Get version from tag
+        id: get_version
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Bump patch version
-        id: version
-        run: |
-          npm version patch --no-git-tag-version
-          VERSION=$(node -p "require('./package.json').version")
+          VERSION=${GITHUB_REF_NAME#v}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          git add package.json package-lock.json
-          git commit -m "chore: bump version to v$VERSION [skip ci]"
-          git push
+
+      - name: Sync package.json version with tag
+        run: |
+          npm version ${{ steps.get_version.outputs.version }} --no-git-tag-version --allow-same-version
 
       - name: Install vsce
         run: npm install -g @vscode/vsce
@@ -52,13 +46,13 @@ jobs:
       - name: Upload VSIX artifact
         uses: actions/upload-artifact@v4
         with:
-          name: markdown-them-${{ steps.version.outputs.version }}
-          path: '*.vsix'
+          name: markdown-them-${{ steps.get_version.outputs.version }}
+          path: "*.vsix"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.version.outputs.version }}
-          name: v${{ steps.version.outputs.version }}
-          files: '*.vsix'
+          tag_name: ${{ github.ref }}
+          name: Release ${{ github.ref_name }}
+          files: "*.vsix"
           generate_release_notes: true
