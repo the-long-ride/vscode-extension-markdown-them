@@ -2,7 +2,7 @@
   "name": "markdown-them",
   "displayName": "Markdown Them",
   "description": "Convert docx, pdf, html, xlsx, pptx, odt, odp, ods, rtf files to markdown in your VS Code's explorer or editor.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "icon": "assets/markdown-them-logo.png",
   "publisher": "the-long-ride",
   "repository": {
@@ -28,6 +28,10 @@
       {
         "command": "markdown-them.convertCurrentToMarkdown",
         "title": "Convert Current File to Markdown"
+      },
+      {
+        "command": "markdown-them.setMaxConcurrentConversions",
+        "title": "Markdown Them: Set Max Concurrent Conversions"
       }
     ],
     "menus": {
@@ -45,7 +49,19 @@
         "key": "ctrl+m ctrl+d",
         "mac": "cmd+m cmd+d"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Markdown Them",
+      "properties": {
+        "markdown-them.maxConcurrentConversions": {
+          "type": "integer",
+          "default": 6,
+          "minimum": 1,
+          "maximum": 16,
+          "description": "Maximum number of files converted simultaneously when using 'Convert to Markdown'. Range: 1–16."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run bundle",

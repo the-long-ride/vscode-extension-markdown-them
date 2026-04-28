@@ -12,3 +12,4 @@
 4. The task `npm: watch` in `.vscode/tasks.json` starts the TypeScript compiler in watch mode automatically.
 5. An Extension Development Host will launch.
 6. Test context menus by right-clicking on files or test shortcuts (`Ctrl+M D`). Breakpoints in `src/extension.ts` will trigger.
+7. Test the concurrency command: Open the Command Palette (`Ctrl+Shift+P`) and run **Markdown Them: Set Max Concurrent Conversions**. Verify the input box and settings update correctly.
