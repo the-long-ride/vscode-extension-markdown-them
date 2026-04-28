@@ -26,7 +26,7 @@ Special thanks to the open-source authors and contributors whose incredible libr
 - [`officeparser`](https://github.com/harshankur/officeParser): A fallback text extractor for `.pptx`, `.odt`, `.odp`, `.ods`, and `.rtf` files.
 
 ## Credits & Links
-[GitHub Repository](https://github.com/the-long-ride/vscode-extension-markdown-them) | [Changelog](https://github.com/the-long-ride/vscode-extension-markdown-them/blob/main/changelog.md) | [Contribution Guidelines](https://github.com/the-long-ride/vscode-extension-markdown-them/blob/main/guideline.md)
+[GitHub Repository](https://github.com/the-long-ride/vscode-extension-markdown-them) | [Changelog](https://github.com/the-long-ride/vscode-extension-markdown-them/blob/main/CHANGELOG.md) | [Contribution Guidelines](https://github.com/the-long-ride/vscode-extension-markdown-them/blob/main/GUIDELINE.md)
 
 ## License
 [MIT](https://github.com/the-long-ride/vscode-extension-markdown-them/blob/main/LICENSE)
