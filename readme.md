@@ -51,7 +51,7 @@ You can change this in three ways:
 
 ## Safely Powered By
 
-We care about security and avoid packages with known vulnerabilities (e.g. `xlsx` or `markdown-it`). 
+I care about security & licensing for commercial use, so I picked the most popular packages with permissive licenses (MIT or BSD-2-Clause).
 Special thanks to the open-source authors and contributors whose incredible libraries power this extension:
 
 - [`mammoth`](https://github.com/mwilliamson/mammoth.js): Robust conversion of `.docx` documents.
