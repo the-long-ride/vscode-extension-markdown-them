@@ -28,6 +28,9 @@ Convert various document files into Markdown (.md) seamlessly inside Visual Stud
 > [!NOTE]
 > Currently, `.pptx` and other office formats (`.odt`, `.odp`, `.ods`, `.rtf`) extract text and tables only; images are ignored to keep output files lightweight & easier to read.
 
+### 4. Troubleshooting
+If a file fails to convert, you can view detailed error logs and stack traces by opening the **Developer: Toggle Developer Tools** command (from the Command Palette) and checking the **Console** tab.
+
 ## Configuration
 
 | Setting | Type | Default | Range | Description |

@@ -57,7 +57,31 @@ async function convertXlsx(filePath: string): Promise<string> {
     worksheet.eachRow((row, rowNumber) => {
       let rowData: any[] = [];
       row.eachCell({ includeEmpty: true }, (cell) => {
-        rowData.push((cell.text || "").replace(/\r?\n/g, " "));
+        let cellText = "";
+        try {
+          cellText = cell.text || "";
+        } catch (err) {
+          if (cell.value !== null && cell.value !== undefined) {
+            if (typeof cell.value === "object") {
+              if ("result" in (cell.value as any)) {
+                cellText = String((cell.value as any).result || "");
+              } else if (cell.value instanceof Date) {
+                cellText = cell.value.toISOString();
+              } else if ("error" in (cell.value as any)) {
+                cellText = String((cell.value as any).error || "");
+              } else {
+                try {
+                  cellText = JSON.stringify(cell.value);
+                } catch {
+                  cellText = String(cell.value);
+                }
+              }
+            } else {
+              cellText = String(cell.value);
+            }
+          }
+        }
+        rowData.push(cellText.replace(/\r?\n/g, " "));
       });
       md += "| " + rowData.join(" | ") + " |\n";
       if (rowNumber === 1) {
@@ -85,17 +109,25 @@ function officeAstToMarkdown(ast: any): string {
         return res;
     }
 
+    function safeGetText(node: any): string {
+        try {
+            return node.text ? String(node.text) : '';
+        } catch {
+            return '';
+        }
+    }
+
     function processNode(node: any): string {
         if (!node) return '';
 
         switch (node.type) {
             case 'text':
-                return processFormatting(node.text || '', node.formatting);
+                return processFormatting(safeGetText(node), node.formatting);
             case 'paragraph':
                 const pText = (node.children || []).map(processNode).join('');
                 const sizeStr = node.children?.[0]?.formatting?.size;
                 if (sizeStr) {
-                    const sizeMatch = sizeStr.match(/(\d+)/);
+                    const sizeMatch = String(sizeStr).match(/(\d+)/);
                     if (sizeMatch) {
                         const size = parseInt(sizeMatch[1]);
                         if (size >= 36) return `\n# ${pText}\n`;
@@ -128,7 +160,7 @@ function officeAstToMarkdown(ast: any): string {
                 if (node.children) {
                     return node.children.map(processNode).join('');
                 }
-                return node.text || '';
+                return safeGetText(node);
         }
     }
 

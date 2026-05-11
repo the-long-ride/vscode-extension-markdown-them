@@ -42,11 +42,13 @@ export function activate(context: vscode.ExtensionContext) {
 
                 convertFile(uri.fsPath, false)
                   .then((mdPath) => {
+                    console.log(`Successfully converted: ${uri.fsPath} to ${mdPath}`);
                     vscode.window.showInformationMessage(
                       `Successfully converted: ${path.basename(mdPath)}`,
                     );
                   })
                   .catch((e: any) => {
+                    console.error(`Failed to convert ${uri.fsPath}:`, e);
                     vscode.window.showErrorMessage(
                       `Failed to convert ${path.basename(uri.fsPath)}: ${e.message}`,
                     );
@@ -91,6 +93,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       try {
         const mdContent = await generateMarkdown(filePath);
+        console.log(`Successfully converted current file: ${filePath}`);
         const doc = await vscode.workspace.openTextDocument({
           content: mdContent,
           language: "markdown",
@@ -100,6 +103,7 @@ export function activate(context: vscode.ExtensionContext) {
           viewColumn: vscode.ViewColumn.Beside,
         });
       } catch (e: any) {
+        console.error(`Failed to convert ${filePath}:`, e);
         vscode.window.showErrorMessage(
           `Failed to convert ${path.basename(filePath)}: ${e.message}`,
         );
