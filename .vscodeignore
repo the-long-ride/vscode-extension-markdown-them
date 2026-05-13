@@ -13,4 +13,4 @@ changelog.md
 assets/**
 !assets/markdown-them-logo.png
 node_modules/**
-
+*.env
