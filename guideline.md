@@ -31,22 +31,45 @@ If you want to add support for a new file type:
 
 ## Publishing
 
-To publish the extension to the VS Code Marketplace, follow these steps:
+To publish the extension, it is highly recommended to package it into a `.vsix` file first. This ensures the artifact remains identical across different registries and minimizes issues with local file configuration.
 
-1.  **Install vsce:**
-    `vsce` (Visual Studio Code Extensions) is the command-line tool for packaging and publishing.
-    ```bash
-    npm install -g @vscode/vsce
-    ```
+### 1. Prerequisites
 
-2.  **Package the Extension:**
-    This creates a `.vsix` file for testing or manual installation.
-    ```bash
-    vsce package
-    ```
+Install the official `vsce` tool globally, which is needed to package the extension:
 
-3. **Publish to marketplace:**
-There are many ways to do this, I give you the link to study how:
+```bash
+npm install -g @vscode/vsce
+```
 
-[https://code.visualstudio.com/api/working-with-extensions/publishing-extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
+### 2. Step 1: Package the Extension
+
+This bundles your extension and packages it into a single `.vsix` file (e.g., `markdown-them-x.x.x.vsix`):
+
+```bash
+vsce package
+```
+
+### 3. Step 2: Publish to VS Code Marketplace
+> *PAT: personal access token*
+
+You can publish the packaged extension directly from your terminal:
+
+```bash
+vsce publish -p <YOUR_VS_CODE_MARKETPLACE_PAT>
+```
+
+Alternatively, you can manually upload the `.vsix` file generated in Step 1 to the [Visual Studio Marketplace Management Dashboard](https://marketplace.visualstudio.com/manage).
+
+### 4. Step 3: Publish to Open VSX Registry
+
+To publish to [open-vsx.org](https://open-vsx.org/), it is best practice to publish the `.vsix` package directly using `ovsx`:
+
+```bash
+npx ovsx publish ./markdown-them-<version>.vsix -p <YOUR_OPEN_VSX_PAT>
+```
+
+### Useful Links
+
+- [Official VS Code Publishing Docs](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
+- [Open VSX Registry Wiki / Publishing Guide](https://github.com/eclipse/openvsx/wiki/Publishing-Extensions)
 
