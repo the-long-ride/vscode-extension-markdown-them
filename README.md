@@ -52,6 +52,42 @@ You can change this in three ways:
 }
 ```
 
+## Node.js Package
+
+The shared converter is also packaged for Node.js consumers as `@the-long-ride/markdown-them`:
+
+```bash
+npm i @the-long-ride/markdown-them
+pnpm add @the-long-ride/markdown-them
+```
+
+```ts
+import { convertFileToMarkdown, generateMarkdown } from "@the-long-ride/markdown-them";
+
+const outputPath = await convertFileToMarkdown("./docs/report.docx");
+const markdown = await generateMarkdown("./docs/report.docx");
+```
+
+Local build commands:
+
+```bash
+npm run pack:vsix
+npm run pack:node-package
+```
+
+Tag releases publish the Node.js package to npm after the package artifact is built. Configure this GitHub repository secret before pushing a `v*` tag:
+
+```text
+NPM_TOKEN
+```
+
+## Source Layout
+
+- `src/core`: shared document-to-Markdown conversion logic.
+- `src/vscode`: VS Code command registrations and editor integration.
+- `src/nodejs-package`: Node.js package entry point.
+- `nodejs-package`: publishable npm package metadata, README, license, and generated `dist`.
+
 ## Safely Powered By
 
 I care about security & licensing for commercial use, so I picked the most popular packages with permissive licenses (MIT or BSD-2-Clause).
@@ -59,7 +95,7 @@ Special thanks to the open-source authors and contributors whose incredible libr
 
 - [`mammoth`](https://github.com/mwilliamson/mammoth.js): Robust conversion of `.docx` documents.
 - [`@opendocsg/pdf2md`](https://github.com/opengovsg/pdf2md): Reliable text extraction from `.pdf` files.
-- [`exceljs`](https://github.com/exceljs/exceljs): Safe parsing of `.xlsx` files into structured markdown tables.
+- [`jszip`](https://github.com/Stuk/jszip) + [`fast-xml-parser`](https://github.com/NaturalIntelligence/fast-xml-parser): Lightweight `.xlsx` parsing into structured markdown tables.
 - [`turndown`](https://github.com/mixmark-io/turndown): Converting `.html` files (or mammoth's HTML output) cleanly to Markdown.
 - [`officeparser`](https://github.com/harshankur/officeParser): A fallback text extractor for `.pptx`, `.odt`, `.odp`, `.ods`, and `.rtf` files.
 
@@ -72,4 +108,3 @@ Special thanks to the open-source authors and contributors whose incredible libr
 
 ## License
 [MIT](https://github.com/the-long-ride/vscode-extension-markdown-them/blob/main/LICENSE)
-

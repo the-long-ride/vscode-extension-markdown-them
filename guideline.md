@@ -10,28 +10,40 @@ Welcome to the `markdown-them` project! This guideline will help you get started
 2. **Compile the Extension:**
    Run `npm run compile` to build the typescript files once, or `npm run watch` to watch for changes.
 
+3. **Build Packages:**
+   Run `npm run pack:vsix` to create a VS Code `.vsix`, or `npm run pack:node-package` to create the npm tarball in `artifacts/`.
+
 ## Debugging
 
 The `.vscode/launch.json` and `.vscode/tasks.json` have been configured to make debugging seamless.
 - Simply press **F5** in VS Code.
 - This will automatically trigger the `npm: watch` task, compile your TypeScript code, and open a new Extension Development Host window.
-- In the new window, you can test the context menus and the keyboard shortcuts. Breakpoints placed in `src/extension.ts` will hit successfully.
+- In the new window, you can test the context menus and the keyboard shortcuts. Breakpoints placed in `src/vscode/extension.ts` will hit successfully.
 
 ## Code Structure
 
-- `src/extension.ts`: The main entry point. Contains the command registrations and the core mapping logic.
-- `package.json`: Holds the extension manifest, configuration, and activation events.
+- `src/core`: Shared conversion logic used by both the extension and npm package.
+- `src/vscode`: The VS Code adapter. Contains command registrations and editor integration.
+- `src/nodejs-package`: The Node.js package entry point.
+- `nodejs-package`: npm package metadata, package README, license, and generated `dist` output.
+- `package.json`: Holds the extension manifest, configuration, activation events, and root build scripts.
 
 ## Adding Support for New File Types
 
 If you want to add support for a new file type:
 1. Update the `when` clause in `package.json` under `menus.explorer/context` to include the new extension.
-2. Update the `switch` statement in `src/extension.ts` (`generateMarkdown` function).
+2. Update the `switch` statement in `src/core/converters.ts` (`generateMarkdown` function).
 3. Use a safe parsing library.
 
 ## Publishing
 
 To publish the extension, it is highly recommended to package it into a `.vsix` file first. This ensures the artifact remains identical across different registries and minimizes issues with local file configuration.
+
+GitHub Actions publishes the Node.js package to npm after the release workflow builds the package tarball. Add this repository secret before creating a `v*` tag:
+
+```text
+NPM_TOKEN
+```
 
 ### 1. Prerequisites
 
@@ -46,7 +58,7 @@ npm install -g @vscode/vsce
 This bundles your extension and packages it into a single `.vsix` file (e.g., `markdown-them-x.x.x.vsix`):
 
 ```bash
-vsce package
+npm run pack:vsix
 ```
 
 ### 3. Step 2: Publish to VS Code Marketplace
@@ -72,4 +84,3 @@ npx ovsx publish ./markdown-them-<version>.vsix -p <YOUR_OPEN_VSX_PAT>
 
 - [Official VS Code Publishing Docs](https://code.visualstudio.com/api/working-with-extensions/publishing-extension)
 - [Open VSX Registry Wiki / Publishing Guide](https://github.com/eclipse/openvsx/wiki/Publishing-Extensions)
-

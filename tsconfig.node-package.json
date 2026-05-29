@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "nodejs-package/dist",
+    "rootDir": "src",
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false
+  },
+  "include": [
+    "src/core/**/*.ts",
+    "src/nodejs-package/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".vscode-test",
+    "src/vscode/**/*"
+  ]
+}

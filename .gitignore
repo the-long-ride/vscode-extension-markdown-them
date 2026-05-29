@@ -1,8 +1,10 @@
 node_modules/
 out/
 dist/
+artifacts/
 .vscode-test/
 *.vsix
+*.tgz
 .DS_Store
 *.log
 *.env

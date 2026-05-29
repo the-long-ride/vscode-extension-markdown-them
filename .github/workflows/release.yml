@@ -6,7 +6,7 @@ on:
       - "v*"
 
 jobs:
-  build:
+  build-vsix:
     name: Build VSIX
     runs-on: ubuntu-latest
     permissions:
@@ -37,22 +37,117 @@ jobs:
         run: |
           npm version ${{ steps.get_version.outputs.version }} --no-git-tag-version --allow-same-version
 
-      - name: Install vsce
-        run: npm install -g @vscode/vsce
-
       - name: Package extension
-        run: vsce package --no-dependencies
+        run: npm run pack:vsix
 
       - name: Upload VSIX artifact
         uses: actions/upload-artifact@v4
         with:
-          name: markdown-them-${{ steps.get_version.outputs.version }}
+          name: markdown-them-vsix-${{ steps.get_version.outputs.version }}
           path: "*.vsix"
+
+  build-node-package:
+    name: Build Node Package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get version from tag
+        id: get_version
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Sync package versions with tag
+        run: |
+          npm version ${{ steps.get_version.outputs.version }} --no-git-tag-version --allow-same-version
+          npm version ${{ steps.get_version.outputs.version }} --no-git-tag-version --allow-same-version --prefix ./nodejs-package
+
+      - name: Pack node package
+        run: npm run pack:node-package
+
+      - name: Upload node package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: markdown-them-node-package-${{ steps.get_version.outputs.version }}
+          path: ./artifacts/*.tgz
+
+  publish-node-package:
+    name: Publish Node Package to npm
+    runs-on: ubuntu-latest
+    needs: build-node-package
+    permissions:
+      contents: read
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    steps:
+      - name: Setup Node.js for npm publish
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Check npm token
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "Missing repository secret: NPM_TOKEN"
+            exit 1
+          fi
+
+      - name: Download node package artifact
+        uses: actions/download-artifact@v4
+        with:
+          pattern: markdown-them-node-package-*
+          path: ./artifacts
+          merge-multiple: true
+
+      - name: Publish package tarball
+        run: npm publish ./artifacts/*.tgz --access public
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs:
+      - build-vsix
+      - build-node-package
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download VSIX artifact
+        uses: actions/download-artifact@v4
+        with:
+          pattern: markdown-them-vsix-*
+          path: ./release-assets
+          merge-multiple: true
+
+      - name: Download node package artifact
+        uses: actions/download-artifact@v4
+        with:
+          pattern: markdown-them-node-package-*
+          path: ./release-assets
+          merge-multiple: true
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          files: "*.vsix"
+          files: |
+            ./release-assets/*.vsix
+            ./release-assets/*.tgz
           generate_release_notes: true

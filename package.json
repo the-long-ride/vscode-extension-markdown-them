@@ -7,7 +7,7 @@
   "publisher": "the-long-ride",
   "repository": {
     "type": "git",
-    "url": "https://github.com/the-long-ride/vscode-extension-markdown-them.git"
+    "url": "git+https://github.com/the-long-ride/vscode-extension-markdown-them.git"
   },
   "license": "MIT",
   "engines": {
@@ -64,11 +64,26 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run bundle",
+    "vscode:prepublish": "npm run bundle:vscode",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "bundle": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --minify",
-    "publish": "npm run bundle && vsce package"
+    "bundle:vscode": "esbuild ./src/vscode/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --minify",
+    "bundle": "npm run bundle:vscode",
+    "clean:node-package": "node -e \"require('fs').rmSync('nodejs-package/dist',{recursive:true,force:true})\"",
+    "build:node-package": "npm run clean:node-package && tsc -p ./tsconfig.node-package.json",
+    "prepare:artifacts": "node -e \"require('fs').mkdirSync('artifacts',{recursive:true})\"",
+    "pack:node-package": "npm run build:node-package && npm run prepare:artifacts && npm pack ./nodejs-package --pack-destination ./artifacts",
+    "pack:vsix": "vsce package --no-dependencies",
+    "pack:all": "npm run pack:vsix && npm run pack:node-package",
+    "publish:vsix": "npm run pack:vsix"
+  },
+  "dependencies": {
+    "@opendocsg/pdf2md": "^0.2.6",
+    "fast-xml-parser": "^5.8.0",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.12.0",
+    "officeparser": "^6.1.0",
+    "turndown": "^7.2.4"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
@@ -76,16 +91,18 @@
     "@types/vscode": "^1.80.0",
     "@vscode/vsce": "^3.9.1",
     "esbuild": "^0.28.0",
-    "typescript": "^6.0.3",
-    "@opendocsg/pdf2md": "^0.2.6",
-    "exceljs": "^3.4.0",
-    "mammoth": "^1.12.0",
-    "officeparser": "^6.1.0",
-    "turndown": "^7.2.4"
+    "typescript": "^6.0.3"
   },
   "resolutions": {
     "fast-uri": "^3.1.2",
     "tmp": "^0.2.4",
     "fast-csv": "^4.3.6"
-  }
+  },
+  "keywords": [],
+  "author": "",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/the-long-ride/vscode-extension-markdown-them/issues"
+  },
+  "homepage": "https://github.com/the-long-ride/vscode-extension-markdown-them#readme"
 }

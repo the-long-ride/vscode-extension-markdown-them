@@ -2,6 +2,11 @@
 
 All notable changes to the "markdown-them" extension will be documented in this file.
 
+## [Unreleased]
+- Split shared conversion logic, VS Code integration, and Node.js package entry points into clearer source folders.
+- Added npm package build/publish support for `@the-long-ride/markdown-them`.
+- Replaced the `.xlsx` conversion dependency on `exceljs` with a lightweight OOXML parser using `jszip` and `fast-xml-parser` to clear npm audit findings.
+
 ## [1.1.4] - 2026-05-11
 - **Bug Fix:** Resolved a `Cannot read properties of null (reading 'toString')` crash when parsing `.xlsx` and other Office files that contain null values, uncalculated formulas, or malformed rich-text cells.
 - **Improvement:**

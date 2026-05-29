@@ -1,0 +1,42 @@
+{
+  "name": "@the-long-ride/markdown-them",
+  "version": "1.1.4",
+  "description": "Convert docx, pdf, html, xlsx, pptx, odt, odp, ods, rtf files to markdown.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/the-long-ride/vscode-extension-markdown-them.git"
+  },
+  "homepage": "https://github.com/the-long-ride/vscode-extension-markdown-them#readme",
+  "bugs": {
+    "url": "https://github.com/the-long-ride/vscode-extension-markdown-them/issues"
+  },
+  "main": "./dist/nodejs-package/index.js",
+  "types": "./dist/nodejs-package/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/nodejs-package/index.d.ts",
+      "require": "./dist/nodejs-package/index.js",
+      "default": "./dist/nodejs-package/index.js"
+    }
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@opendocsg/pdf2md": "^0.2.6",
+    "fast-xml-parser": "^5.8.0",
+    "jszip": "^3.10.1",
+    "mammoth": "^1.12.0",
+    "officeparser": "^6.1.0",
+    "turndown": "^7.2.4"
+  }
+}
