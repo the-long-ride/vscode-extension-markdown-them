@@ -9,6 +9,7 @@ Convert various document files into Markdown (.md) seamlessly inside Visual Stud
 - **Supported formats:** `.docx`, `.pdf`, `.html`, `.xlsx`, `.pptx`, `.odt`, `.odp`, `.ods`, `.rtf`.
 - **Concurrent batch processing:** Convert dozens of files at once with optimized performance.
 - **Preview mode:** Instantly view converted markdown for your active document.
+- **Node.js package:** Use the same converter outside VS Code with `@the-long-ride/markdown-them`.
 
 ## Usage
 
@@ -54,7 +55,7 @@ You can change this in three ways:
 
 ## Node.js Package
 
-The shared converter is also packaged for Node.js consumers as `@the-long-ride/markdown-them`:
+Starting with v1.2.0, the shared converter is also packaged for Node.js consumers as `@the-long-ride/markdown-them`:
 
 ```bash
 npm i @the-long-ride/markdown-them

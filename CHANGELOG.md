@@ -3,8 +3,10 @@
 All notable changes to the "markdown-them" extension will be documented in this file.
 
 ## [Unreleased]
+
+## [1.2.0] - 2026-05-29
 - Split shared conversion logic, VS Code integration, and Node.js package entry points into clearer source folders.
-- Added npm package build/publish support for `@the-long-ride/markdown-them`.
+- Added the new Node.js package `@the-long-ride/markdown-them` with npm build and publish automation.
 - Replaced the `.xlsx` conversion dependency on `exceljs` with a lightweight OOXML parser using `jszip` and `fast-xml-parser` to clear npm audit findings.
 
 ## [1.1.4] - 2026-05-11
